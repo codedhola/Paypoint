@@ -6,37 +6,30 @@ const app = express()
 app.use(cors())
 app.use(express.urlencoded({ extended: false}))
 
-app.get("/",  (req, res) => {
-    // axios.get("https://billing-staging.bytestacks.io/api/v1/electricity/billers",{}, {
-    //     headers: {
-    //         "Content-type" : "application/json",
-    //         "api-key": "Fincra_6VA35CDPQNMRS"
-    //     }
-    // })
-
+app.get("/",  async (req, res) => {
     const options = {
         method: 'GET',
         url: 'https://billing-staging.bytestacks.io/api/v1/electricity/billers',
-        headers: {accept: 'application/json', 'content-type': 'application/json', "api-key": "Fincra_6VA35CDPQNMRS"}
+        headers: {'content-type': 'application/json', "api-key": "Fincra_6VA35CDPQNMRS"}
       };
-      
-      axios
-        .request(options)
-        .then(function (response) {
-          console.log(response.data);
+      try{
+        const data = await axios.request(options)
+        res.status(200).json({
+          status: "Success",
+          message: data.data
         })
-        .catch(function (error) {
-          console.error(error);
-        });
-    res.status(200).json({
-        status: "success",
-        message: "loading project..."
-    })
+      }catch(err){
+        res.status(400).json({
+          status: "Failed",
+          message: err
+        })
+      }
+      
+    
 })
 
 app.post("/", (req, res) => {
     const body = req.body;
-    console.log(body)
     res.status(200).json({
         status: "success",
         message: "loading project..."
