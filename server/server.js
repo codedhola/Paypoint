@@ -6,34 +6,32 @@ const app = express()
 app.use(cors())
 app.use(express.urlencoded({ extended: false}))
 
-app.get("/",  async (req, res) => {
-    const options = {
-        method: 'GET',
-        url: 'https://billing-staging.bytestacks.io/api/v1/electricity/billers',
-        headers: {'content-type': 'application/json', "api-key": "Fincra_6VA35CDPQNMRS"}
-      };
-      try{
-        const data = await axios.request(options)
-        res.status(200).json({
-          status: "Success",
-          message: data.data
-        })
-      }catch(err){
-        res.status(400).json({
-          status: "Failed",
-          message: err
-        })
-      }
-      
-    
-})
-
-app.post("/", (req, res) => {
+app.get("/pay",  async (req, res) => {
     const body = req.body;
     res.status(200).json({
         status: "success",
         message: "loading project..."
+    })  
+})
+
+app.post("/pay", async (req, res) => {
+  try{
+    const data = {provider: 'ikeja electric prepaid', meter_number: '23100009119'}
+     const response =  await axios.post('https://billing-staging.bytestacks.io/api/v1/electricity/verify', {provider: 'ikeja electric prepaid', meter_number: '23100009119'}, {
+        headers: {'content-type': 'application/json', "api-key": "Fincra_6VA35CDPQNMRS"},
+      })
+      res.status(200).json({
+            status: "Success",
+            data: response.data
+          })
+
+  }catch(error){
+    res.status(400).json({
+      status: "Failed",
+      err: error
     })
+  }
+    
 })
 
 const PORT = 5050;
