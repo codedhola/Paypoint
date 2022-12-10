@@ -6,7 +6,7 @@ const app = express()
 app.use(cors())
 app.use(express.urlencoded({ extended: false}))
 
-app.get("/pay",  async (req, res) => {
+app.get("/",  async (req, res) => {
     const body = req.body;
     res.status(200).json({
         status: "success",
@@ -17,9 +17,10 @@ app.get("/pay",  async (req, res) => {
 app.post("/pay", async (req, res) => {
   try{
     const data = {provider: 'ikeja electric prepaid', meter_number: '23100009119'}
-     const response =  await axios.post('https://billing-staging.bytestacks.io/api/v1/electricity/verify', {provider: 'ikeja electric prepaid', meter_number: '23100009119'}, {
+     const response =  await axios.post('https://billing-staging.bytestacks.io/api/v1/electricity/subscribe', {provider: 'ikeja electric prepaid', meter_number: '23100009119'}, {
         headers: {'content-type': 'application/json', "api-key": "Fincra_6VA35CDPQNMRS"},
       })
+      console.log(response.data)
       res.status(200).json({
             status: "Success",
             data: response.data
@@ -31,7 +32,6 @@ app.post("/pay", async (req, res) => {
       err: error
     })
   }
-    
 })
 
 const PORT = 5050;
