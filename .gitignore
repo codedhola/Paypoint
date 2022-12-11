@@ -1,2 +1,4 @@
 /.vscode
 article.md
+*.png
+.env
